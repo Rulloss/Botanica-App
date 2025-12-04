@@ -1,11 +1,14 @@
 import axios from 'axios';
 
-// Vite dev proxy kullanımı: baseURL '/trefle' olarak ayarlanır
+// Dev ve prod için doğru baseURL/headers seçimi
+const baseURL = import.meta.env.PROD ? '/api/trefle' : '/trefle';
+const defaultHeaders = import.meta.env.PROD
+  ? {}
+  : { Authorization: `Bearer ${import.meta.env.VITE_TREFLE_TOKEN}` };
+
 const api = axios.create({
-  baseURL: '/trefle',
-  headers: {
-    Authorization: `Bearer ${import.meta.env.VITE_TREFLE_TOKEN}`,
-  },
+  baseURL,
+  headers: defaultHeaders,
 });
 
 export const getPlants = async (query = '', page = 1) => {
